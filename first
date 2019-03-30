@@ -1,0 +1,20 @@
+No 1：Home-assistant (v0.6+)
+基于Python 3的开源家庭自动化平台[Github 11357 stars，由Paulus Schoutsen提供]
+
+https://github.com/home-assistant/home-assistant
+
+
+No 2：Pipenv
+Python.org官方推荐的Python打包工具。它会自动为项目创建和管理virtualenv，并在安装/卸载软件包时从Pipfile中添加/删除软件包。 [Github 7273 stars，由Kenneth Reitz提供]
+
+https://github.com/pypa/pipenv
+
+No 3：MicroPython
+一个脱胎于Python且非常高效的Python实现，主要是为了能在嵌入式硬件上（这里特指微控制器级别）更简单地实现对底层的操作。[Github 5728 stars]
+
+https://github.com/micropython/micropython
+
+No 4：Dash
+Dash是一个纯Python写成的框架，无需JavaScript即可构建交互式的分析类web应用程序。[Github 3281 stars，由Chris P提供]
+
+https://github.com/plotly/dash
