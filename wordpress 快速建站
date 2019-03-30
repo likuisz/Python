@@ -1,0 +1,115 @@
+1小时学会建站（三）：安装wordpress，搭建个人站点
+购买主机空间并绑定域名后，在主机内安装wordpress，搭建个人站点。
+
+下面是具体的步骤和需要执行的命令：
+
+更新软件源
+ 1.安装LAMP环境
+1.1 安装Apache2
+1.2 安装MySQL5
+1.3 安装PHP5
+1.4 安装phpMyAdmin
+2.初始化数据库
+3.下载并配置WordPress
+4.配置Apache服务器
+5.安装WordPress
+6.设置主题（themes）
+7.设置固定链接（Permalinks）
+8.安装插件
+8.1 JetPack插件
+8.2 Google Analytics Dashboard插件
+8.3 Menu Social Icons插件
+8.4 安装WP Super Cache插件
+9.使用Markdown发布文章
+10.WP备份和恢复
+0.更新软件源
+$ sudo apt-get update
+1. 安装LAMP环境
+LAMP 是Linux, Apache, MySQL, PHP, perl的缩写. 指在linux上安装Apache2，MySQL, PHP等软件包所建立的网站运行平台，是目前中小网站主要的运行环境。
+
+1.1 安装Apache2
+$ sudo apt-get install apache2
+1.2 安装MySQL5
+$ sudo apt-get install mysql-server mysql-client
+中途需要设置root密码
+
+1.3 安装PHP5
+$ sudo apt-get install php5 libapache2-mod-php5 php5-mysql php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-xcache libssh2-php
+1.4 安装phpMyAdmin
+$ sudo apt-get install phpmyadmin
+...
+Web server to reconfigure automatically: < -- apache2
+Configure database for phpmyadmin with dbconfig-common? <-- No 
+...
+2. 初始化数据库
+$ sudo mysql -u root -p
+Enter Password:
+...
+mysql>  CREATE DATABASE wordpressdb;
+mysql>  CREATE USER wordpressuser@localhost IDENTIFIED BY 'wordpresspassword';
+mysql>  GRANT ALL PRIVILEGES ON wordpressdb.* TO wordpressuser@localhost;
+mysql> FLUSH PRIVILEGES;
+mysql> exit
+重启服务
+
+$ sudo service apache2 restart
+$ sudo service mysql restart
+3. 下载并配置WordPress
+$ mkdir temp
+$ cd temp
+$ wget http://wordpress.org/wordpress-4.x.tar.gz （注意将版本号换位当前版本）
+$ tar zxf wordpress-4.x.tar.gz -C /var/www/html/
+$ mkdir -p /var/www/html/wordpress/wp-content/uploads
+关键更改目录权限为www-data www-data
+
+$ sudo chown -R www-data.www-data /var/www/html/wordpress
+$ sudo chmod -R 755 /var/www/html/wordpress
+$ sudo chown -R :www-data /var/www/html/wordpress/wp-content/uploads
+配置wp-config.php
+
+$ cd /var/www/html/wordpress/
+$ cp wp-config-sample.php wp-config.php
+$ apt-get install vim
+$ vim wp-config.php
+
+#wp-config.php
+...
+// ** MySQL settings - You can get this info from your web host ** // 
+/** The name of the database for WordPress */ 
+define('DB_NAME', 'wordpressdb'); 
+/** MySQL database username */ 
+define('DB_USER', 'wordpressuser'); 
+/** MySQL database password */
+define('DB_PASSWORD', 'wordpresspassword');
+...
+4. 配置Apache服务器
+在我的虚拟主机上映射的域名是
+golearncoding，
+我将其作为我的博客的域名。
+
+在/etc/apache2/sites-available/目录下复制一份000-default.conf命名为wordpress.conf，进行修改第一行*:80 为blog.example.com:80，启用这个网站，重启apache服务。
+
+$ cd /etc/apache2/sites-available/
+$ cp 000-default.conf wordpress.conf
+$ sudo vim /etc/apache2/sites-available/wordpress.conf
+
+#wordpress.conf
+<virtualhost golearncoding:80>
+同时将 Documentroot 修改为
+/var/www/html/wordpress
+... $ sudo a2ensite wordpress 
+$ sudo service apache2 restart
+创建.htaccess文件
+
+$ sudo touch /var/www/html/wordpress/.htaccess
+$ sudo chown www-data:www-data /var/www/html/wordpress/.htaccess
+$ sudo chmod 664 /var/www/html/wordpress/.htaccess
+5. 安装WordPress
+用浏览器打开http://golearncoding.com，开始安装WP
+
+6. 设置主题（themes）
+我选用默认的Twenty Fifteen主题，在定制中进行了配置：
+
+修改站点身份中站点图标为我的头像
+修改顶部图像
+添加了一些小工具
